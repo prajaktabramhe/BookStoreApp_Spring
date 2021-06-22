@@ -84,4 +84,40 @@ public class BookService implements IBookService
 				}
 	}
 
+	/**
+	 * To update book data
+	 */
+	@Override
+	public Response updateBook(String token, BookDTO bookDto) 
+	{
+		// check if user is present
+				long id = tokenUtil.decodeToken(token);
+				Optional<UserEntity> isUserPresent = userRepository.findById(id);
+				if(isUserPresent.isPresent()) 
+				{
+					// check if book present
+					Optional<BookEntity> isBookPresent = bookRepository.findByBookName(bookDto.getBookName());
+					if(isBookPresent.isPresent()) {
+						isBookPresent.get().setAuthor(bookDto.getAuthor());
+						isBookPresent.get().setDescription(bookDto.getDescription());
+						isBookPresent.get().setLogo(bookDto.getLogo());
+						isBookPresent.get().setPrice(bookDto.getPrice());
+						isBookPresent.get().setQuantity(bookDto.getQuantity());
+						bookRepository.save(isBookPresent.get());
+						log.debug("Book updated.");
+						return new Response(200, "Book Updated.", null);
+					}
+					else 
+					{
+						log.error("Book not found.");
+						throw new BookStoreException(404,"Book Not found");
+					}
+				}
+				else 
+				{
+					log.error("User not found.");
+					throw new BookStoreException(404,"User Not found");
+				}
+	}
+
 }

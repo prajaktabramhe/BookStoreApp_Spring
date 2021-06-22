@@ -14,4 +14,7 @@ public interface IBookService {
 	// Get all books
 	List<BookEntity> getAllBooks(String token);
 
+	// To update book details
+	Response updateBook(String token, BookDTO bookDto);
+
 }
