@@ -1,5 +1,6 @@
 package com.bridgelabz.bookstore.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -57,6 +58,25 @@ public class BookService implements IBookService
 						log.debug("New book added.");
 						return new Response(200, "New Book Added.", null);
 					}
+				}
+				else {
+					log.error("User not found.");
+					throw new BookStoreException(404,"User Not found");
+				}
+	}
+
+	/**
+	 * Get all books
+	 */
+	@Override
+	public List<BookEntity> getAllBooks(String token) 
+	{
+		// check if user is present
+				long id = tokenUtil.decodeToken(token);
+				Optional<UserEntity> isUserPresent = userRepository.findById(id);
+				if(isUserPresent.isPresent()) {
+					List<BookEntity> books = bookRepository.findAll();
+					return books;
 				}
 				else {
 					log.error("User not found.");
