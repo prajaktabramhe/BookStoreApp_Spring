@@ -44,7 +44,7 @@ public class UserService implements IUserService {
 			throw new BookStoreException(400,"User already exists. Email:"+dto.getEmailId());
 		}else 
 		{
-		UserEntity userEntity = new UserEntity(dto);
+		UserEntity userEntity = modelMapper.map(dto,UserEntity.class);
 		userRegistrationRepository.save(userEntity);
 		 return new Response(200, "Saved Succefully", null);
 		}
