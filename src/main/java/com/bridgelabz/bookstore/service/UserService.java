@@ -1,15 +1,16 @@
 package com.bridgelabz.bookstore.service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-
+import javax.mail.MessagingException;
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.bridgelabz.bookstore.dto.ForgotPasswordDTO;
 import com.bridgelabz.bookstore.dto.LoginDTO;
 import com.bridgelabz.bookstore.dto.UserDTO;
@@ -34,9 +35,19 @@ public class UserService implements IUserService {
 	@Autowired
 	TokenUtil tokenUtil;
 	
+	@Autowired
+	EmailService emailService;
+	
+	
+	
+	/**
+	 *  To Register new user to database
+	 */
 	@Override
 	public Response registerUserData(UserDTO dto) 
 	{
+		String host = System.getenv("HOST_NAME");
+		String port = System.getenv("HOST_PORT");
 		Optional<UserEntity> isPresent = userRegistrationRepository.findByEmailId(dto.getEmailId());
 		if(isPresent.isPresent()) 
 		{
@@ -46,10 +57,17 @@ public class UserService implements IUserService {
 		{
 		UserEntity userEntity = modelMapper.map(dto,UserEntity.class);
 		userRegistrationRepository.save(userEntity);
+		// Send email to user for verification
+		emailService.send( dto.getEmailId(), "subject",  "body");
 		 return new Response(200, "Saved Succefully", null);
-		}
 	}
+}
 
+
+
+	/**
+	 *  To login user using email id and password 
+	 */
 	@Override
 	public Response loginData(@Valid LoginDTO login) {
 		Optional<UserEntity> user = userRegistrationRepository.findByemailIdAndPassword(login.getEmailId(), login.getPassword());
@@ -61,7 +79,9 @@ public class UserService implements IUserService {
 		}
 	}
 
-	
+	/**
+	 * To delete user
+	 */
 	@Override
 	public Response deleteUser(String token) 
 	{
@@ -80,6 +100,9 @@ public class UserService implements IUserService {
 		}
 	}
 
+	/**
+	 * To get all users
+	 */
 	@Override
 	public List<UserEntity> getAllUsers(String token) 
 	{
@@ -96,6 +119,32 @@ public class UserService implements IUserService {
 		}
 	}
 
+	/**
+	 * To verify use
+	 */
+	@Override
+	public Response verifyUser(String emailId) 
+	{
+//		long id = tokenUtil.decodeToken(token);
+		Optional<UserEntity> isUserPresent = userRegistrationRepository.findByEmailId(emailId);
+		if(isUserPresent.isPresent()) 
+		{
+			isUserPresent.get().setVerify(true);
+			userRegistrationRepository.save(isUserPresent.get());
+			log.debug("User: " + isUserPresent.get() + " Verified!");
+			return new Response(200, "User verified successfully!", null);
+		}
+		else 
+		{
+			log.error("User not found.");
+			throw new BookStoreException(404,"User Not found");
+		}
+	}
+	
+
+	/**
+	 * To update user details
+	 */
 	@Override
 	public Response updateUser(String token, UserDTO dto) {
 		long id = tokenUtil.decodeToken(token);
@@ -119,6 +168,9 @@ public class UserService implements IUserService {
 		}
 	}
 
+	/**
+	 * To reset password when forgot
+	 */
 	@Override
 	public Response forgotPassword(ForgotPasswordDTO forgotPasswordDTO) 
 	{
@@ -131,6 +183,7 @@ public class UserService implements IUserService {
 			return new Response(400, "Password and Confirm Password Do Not Match", null);
 		}
 	}
+
 	
 
 }

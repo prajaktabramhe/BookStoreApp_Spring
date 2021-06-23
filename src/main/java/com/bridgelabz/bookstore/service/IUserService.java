@@ -27,4 +27,6 @@ public interface IUserService {
 
 	Response forgotPassword(@Valid ForgotPasswordDTO forgotPasswordDTO);
 
+	Response verifyUser(String token);
+
 }

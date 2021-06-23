@@ -56,6 +56,13 @@ public class UserController {
 		return new ResponseEntity<>(userList,HttpStatus.OK);
 	}
 	
+	@GetMapping("/verify/{emailId}")
+	public ResponseEntity<Response> verifyUser(@PathVariable String emailId){
+		log.debug("verify user");
+		Response userEntity = userService.verifyUser(emailId);
+		return new ResponseEntity<Response>(userEntity,HttpStatus.OK);
+	}
+	
 	@PutMapping("/updateUser/{token}")
 	public ResponseEntity<Response> updateUser(@PathVariable String token,@RequestBody UserDTO dto){
 		log.debug("Update user");
