@@ -15,5 +15,4 @@ public interface UserRegistrationRepository extends JpaRepository<UserEntity,Lon
 	Optional<UserEntity> findByemailIdAndPassword(String emailId, String password);
 
 
-
 }
