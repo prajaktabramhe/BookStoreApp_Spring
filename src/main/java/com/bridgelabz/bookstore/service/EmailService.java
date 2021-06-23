@@ -26,9 +26,9 @@ public class EmailService {
 
 	public static void send(String toEmail, String subject, String body)
 	{
-		final String fromEmail = "prajakta14bramhe@gmail.com"; 
+		final String fromEmail = System.getenv("mail_user");
 		// requires valid gmail id 
-		final String password = "14praju1996@"
+		final String password = System.getenv("mail_pass");
 		; // correct password for gmail id
 	Properties props = new Properties();
 	props.put("mail.smtp.host", "smtp.gmail.com");
