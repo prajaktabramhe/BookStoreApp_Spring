@@ -50,14 +50,16 @@ public class UserController {
 	}
 	
 	@GetMapping("/getUser/{token}")
-	public ResponseEntity<List<?>> getAllUsers(@PathVariable String token){
+	public ResponseEntity<List<?>> getAllUsers(@PathVariable String token)
+	{
 		log.debug("Get all users");
 		List<UserEntity> userList = userService.getAllUsers(token);
 		return new ResponseEntity<>(userList,HttpStatus.OK);
 	}
 	
 	@GetMapping("/verify/{emailId}")
-	public ResponseEntity<Response> verifyUser(@PathVariable String emailId){
+	public ResponseEntity<Response> verifyUser(@PathVariable String emailId)
+	{
 		log.debug("verify user");
 		Response userEntity = userService.verifyUser(emailId);
 		return new ResponseEntity<Response>(userEntity,HttpStatus.OK);
