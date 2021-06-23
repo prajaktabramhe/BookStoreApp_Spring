@@ -10,7 +10,8 @@ import lombok.Data;
 
 @Entity
 @Table(name = "cart")
-public @Data class CartEntity {
+public @Data class CartEntity 
+{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
