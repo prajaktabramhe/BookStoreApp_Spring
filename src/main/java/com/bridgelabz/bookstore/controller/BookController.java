@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,8 +38,8 @@ public class BookController {
 	 * @param token
 	 * @return
 	 */
-	@PostMapping("/addBook/{token}")
-	public ResponseEntity<Response> addBook(@RequestBody BookDTO bookDto,@PathVariable String token){
+	@PostMapping("/addBook")
+	public ResponseEntity<Response> addBook(@RequestBody BookDTO bookDto,@RequestHeader String token){
 		log.debug("Add new book");
 		Response response = bookService.addNewBook(token,bookDto);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
@@ -49,8 +50,8 @@ public class BookController {
 	 * @param token
 	 * @return ResponseEntity<List<?>>
 	 */
-	@GetMapping("/getBooks/{token}")
-	public ResponseEntity<List<?>> getAllBooks(@PathVariable String token)
+	@GetMapping("/getBooks")
+	public ResponseEntity<List<?>> getAllBooks(@RequestHeader String token)
 	{
 		log.debug("Get all books");
 		List<BookEntity> books = bookService.getAllBooks(token);
@@ -63,8 +64,8 @@ public class BookController {
 	 * @param token : JWT to authorize user
 	 * @return : ResponseEntity<Response>
 	 */
-	@PutMapping("/updateBook/{token}")
-	public ResponseEntity<Response> updateBook(@RequestBody BookDTO bookDto,@PathVariable String token)
+	@PutMapping("/updateBook")
+	public ResponseEntity<Response> updateBook(@RequestHeader BookDTO bookDto,@PathVariable String token)
 	{
 		log.debug("Update book");
 		Response response = bookService.updateBook(token,bookDto);
@@ -78,8 +79,8 @@ public class BookController {
 	 * @param price : Book price to update
 	 * @return : ResponseEntity<Response>
 	 */
-	@PutMapping("/updateBookPrice/{token}")
-	public ResponseEntity<Response> updateBookPrice(@PathVariable String token,@RequestParam("bookName") String bookName,
+	@PutMapping("/updateBookPrice")
+	public ResponseEntity<Response> updateBookPrice(@RequestHeader String token,@RequestParam("bookName") String bookName,
 			@RequestParam("quantity") Double price){
 		log.debug("Update book price");
 		Response response = bookService.updateBookPrice(token,bookName,price);
@@ -93,8 +94,8 @@ public class BookController {
 	 * @param quantity : Book quantity to update
 	 * @return ResponseEntity<Response>
 	 */
-	@PutMapping("/updateBookQuantity/{token}")
-	public ResponseEntity<Response> updateBookQuantity(@PathVariable String token,@RequestParam("bookName") String bookName,
+	@PutMapping("/updateBookQuantity")
+	public ResponseEntity<Response> updateBookQuantity(@RequestHeader String token,@RequestParam("bookName") String bookName,
 			@RequestParam("quantity") int newQuantity){
 		log.debug("Update book quantity");
 		Response response = bookService.updateBookQuantity(token,bookName,newQuantity);
@@ -107,8 +108,8 @@ public class BookController {
 	 * @param bookName
 	 * @return ResponseEntity<Response>
 	 */
-	@DeleteMapping("/deleteBook/{token}")
-	public ResponseEntity<Response> deleteBook(@PathVariable String token,@RequestParam("name") String bookName){
+	@DeleteMapping("/deleteBook")
+	public ResponseEntity<Response> deleteBook(@RequestHeader String token,@RequestParam("name") String bookName){
 		log.debug("Delete book");
 		Response response = bookService.deleteBook(token,bookName);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,8 +33,8 @@ public class CartController {
 	 * @param cartDto
 	 * @return :ResponseEntity<Response>
 	 */
-	@PostMapping("/addToCart/{token}")
-	public ResponseEntity<Response> addBookToCart(@PathVariable String token,@RequestBody CartDTO cartDto) 
+	@PostMapping("/addToCart")
+	public ResponseEntity<Response> addBookToCart(@RequestHeader String token,@RequestBody CartDTO cartDto) 
 	{
 		log.debug("Add prod to cart");
 		Response response = cartService.addToCart(token,cartDto);
@@ -46,8 +47,8 @@ public class CartController {
 	 * @param cartId
 	 * @return
 	 */
-	@DeleteMapping("/removeCartItem/{token}")
-	public ResponseEntity<Response> removeCartItem(@PathVariable String token,@RequestParam("cartId") long cartId) 
+	@DeleteMapping("/removeCartItem")
+	public ResponseEntity<Response> removeCartItem(@RequestHeader String token,@RequestParam("cartId") long cartId) 
 	{
 		log.debug("Remove prod from cart");
 		Response response = cartService.removeCartItem(token,cartId);
@@ -60,8 +61,8 @@ public class CartController {
 	 * @param cartDto
 	 * @return
 	 */
-	@PutMapping("/updateCartItem/{token}")
-	public ResponseEntity<Response> updateCartItem(@PathVariable String token,@RequestBody CartDTO cartDto) 
+	@PutMapping("/updateCartItem")
+	public ResponseEntity<Response> updateCartItem(@RequestHeader String token,@RequestBody CartDTO cartDto) 
 	{
 		log.debug("Update cart");
 		Response response = cartService.updateCartItem(token,cartDto);
