@@ -1,5 +1,6 @@
 package com.bridgelabz.bookstore.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -139,6 +140,32 @@ public class CartService implements ICartService
 		{
 			log.error("User not found");
 			throw new BookStoreException(404, "User not found");
+		}
+	}
+
+	@Override
+	public List<CartEntity> getUserCart(String token) 
+	{
+		long id = tokenUtil.decodeToken(token);
+		Optional<UserEntity> isUserPresent = userRegistrationRepository.findById(id);
+		if(isUserPresent.isPresent()) 
+		{
+			Optional<CartEntity> orderForUserExists = cartRepository.findByUserId(id);
+			if(orderForUserExists.isPresent()) 
+			{
+				List<CartEntity> usersOrders = cartRepository.getAllOrdersForUser(id);
+				return usersOrders;
+			}
+			else 
+			{
+				log.error("No orders exists for user");
+				throw new BookStoreException(404, "No orders exists for user");
+			}
+		}
+		else 
+		{
+			log.error("User not found");
+			throw new BookStoreException(404, "User not found.");
 		}
 	}
 

@@ -1,9 +1,12 @@
 package com.bridgelabz.bookstore.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.bookstore.dto.CartDTO;
+import com.bridgelabz.bookstore.entity.CartEntity;
 import com.bridgelabz.bookstore.service.ICartService;
 import com.bridgelabz.bookstore.util.Response;
 
@@ -67,6 +71,14 @@ public class CartController {
 		log.debug("Update cart");
 		Response response = cartService.updateCartItem(token,cartDto);
 		return new ResponseEntity<Response>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getAllUserCart")
+	public ResponseEntity<List<?>> getAllUserCart(@RequestHeader String token)
+	{
+		log.debug("Get all orders for user");
+		List<CartEntity> orders = cartService.getUserCart(token);
+		return new ResponseEntity<List<?>>(orders,HttpStatus.OK);
 	}
 }
 
