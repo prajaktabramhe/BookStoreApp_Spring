@@ -1,5 +1,6 @@
 package com.bridgelabz.bookstore.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.bookstore.dto.CartDTO;
+import com.bridgelabz.bookstore.dto.CartListDTO;
 import com.bridgelabz.bookstore.entity.BookEntity;
 import com.bridgelabz.bookstore.entity.CartEntity;
 import com.bridgelabz.bookstore.entity.UserEntity;
@@ -144,23 +146,33 @@ public class CartService implements ICartService
 	}
 
 	@Override
-	public List<CartEntity> getUserCart(String token) 
+	public List<CartListDTO> getUserCart(String token) 
 	{
+		List<CartListDTO> cartList = new ArrayList<>();
 		long id = tokenUtil.decodeToken(token);
 		Optional<UserEntity> isUserPresent = userRegistrationRepository.findById(id);
 		if(isUserPresent.isPresent()) 
 		{
-			Optional<CartEntity> orderForUserExists = cartRepository.findByUserId(id);
-			if(orderForUserExists.isPresent()) 
-			{
-				List<CartEntity> usersOrders = cartRepository.getAllOrdersForUser(id);
-				return usersOrders;
-			}
-			else 
-			{
-				log.error("No orders exists for user");
-				throw new BookStoreException(404, "No orders exists for user");
-			}
+//			Optional<CartEntity> orderForUserExists = cartRepository.findByUserId(id);
+//			if(orderForUserExists.isPresent()) 
+//			{
+				List<CartEntity> usersOrders = cartRepository.findAllByuserId(id);
+				System.out.println("checked data" + usersOrders);
+				usersOrders.forEach(cart -> {
+					CartListDTO cartData = new CartListDTO();
+					cartData.setId(cart.getId());
+					cartData.setQuantity(cart.getQuantity());
+					cartData.setUserId(cart.getUserId());
+					cartData.setBook(bookRepository.findById(cart.getBookId()).get());
+					cartList.add(cartData);
+				});
+				return cartList;
+//			}
+//			else 
+//			{
+//				log.error("No orders exists for user");
+//				throw new BookStoreException(404, "No orders exists for user");
+//			}
 		}
 		else 
 		{

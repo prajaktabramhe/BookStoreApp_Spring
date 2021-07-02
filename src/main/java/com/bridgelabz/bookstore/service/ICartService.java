@@ -3,6 +3,7 @@ package com.bridgelabz.bookstore.service;
 import java.util.List;
 
 import com.bridgelabz.bookstore.dto.CartDTO;
+import com.bridgelabz.bookstore.dto.CartListDTO;
 import com.bridgelabz.bookstore.entity.CartEntity;
 import com.bridgelabz.bookstore.entity.OrderEntity;
 import com.bridgelabz.bookstore.util.Response;
@@ -19,6 +20,6 @@ public interface ICartService {
 	Response updateCartItem(String token, CartDTO cartDto);
 
 	// To get all cart by user
-	List<CartEntity> getUserCart(String token);
+	List<CartListDTO> getUserCart(String token);
 
 }

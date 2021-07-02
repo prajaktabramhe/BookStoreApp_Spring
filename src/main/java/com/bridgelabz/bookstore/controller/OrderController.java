@@ -29,7 +29,7 @@ public class OrderController {
 	@Autowired
 	IOrderService orderService;
 
-	@PostMapping("placeOrder")
+	@PostMapping("/placeOrder")
 	public ResponseEntity<Response> placeOrder(@RequestHeader String token,@RequestBody OrderDTO orderDTO){
 		log.debug("Place order");
 		Response response = orderService.placeOrder(token,orderDTO);

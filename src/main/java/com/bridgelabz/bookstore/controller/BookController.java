@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +39,7 @@ public class BookController {
 	 * @param token
 	 * @return
 	 */
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/addBook")
 	public ResponseEntity<Response> addBook(@RequestBody BookDTO bookDto,@RequestHeader String token){
 		log.debug("Add new book");
@@ -50,6 +52,7 @@ public class BookController {
 	 * @param token
 	 * @return ResponseEntity<List<?>>
 	 */
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/getBooks")
 	public ResponseEntity<List<?>> getAllBooks(@RequestHeader String token)
 	{
@@ -64,6 +67,7 @@ public class BookController {
 	 * @param token : JWT to authorize user
 	 * @return : ResponseEntity<Response>
 	 */
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("/updateBook")
 	public ResponseEntity<Response> updateBook(@RequestHeader BookDTO bookDto,@PathVariable String token)
 	{
@@ -79,6 +83,7 @@ public class BookController {
 	 * @param price : Book price to update
 	 * @return : ResponseEntity<Response>
 	 */
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("/updateBookPrice")
 	public ResponseEntity<Response> updateBookPrice(@RequestHeader String token,@RequestParam("bookName") String bookName,
 			@RequestParam("quantity") Double price){
@@ -94,6 +99,7 @@ public class BookController {
 	 * @param quantity : Book quantity to update
 	 * @return ResponseEntity<Response>
 	 */
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("/updateBookQuantity")
 	public ResponseEntity<Response> updateBookQuantity(@RequestHeader String token,@RequestParam("bookName") String bookName,
 			@RequestParam("quantity") int newQuantity){
@@ -108,6 +114,7 @@ public class BookController {
 	 * @param bookName
 	 * @return ResponseEntity<Response>
 	 */
+	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("/deleteBook")
 	public ResponseEntity<Response> deleteBook(@RequestHeader String token,@RequestParam("name") String bookName){
 		log.debug("Delete book");

@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +35,7 @@ public class UserController {
 	@Autowired
 	IUserService userService;
 	
-		
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/register")
 	public ResponseEntity<Response> registerUserData(@Valid @RequestBody UserDTO dto){
 		log.debug("Register User");
@@ -43,6 +44,7 @@ public class UserController {
 		return new ResponseEntity<Response>(userEntity,HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/login")
 	public ResponseEntity<Response> login(@Valid @RequestBody LoginDTO login){
 		Response response = userService.loginData(login);
@@ -50,6 +52,7 @@ public class UserController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/getUser")
 	public ResponseEntity<List<?>> getAllUsers(@RequestHeader String token)
 	{
@@ -58,6 +61,7 @@ public class UserController {
 		return new ResponseEntity<>(userList,HttpStatus.OK);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/verify/{emailId}")
 	public ResponseEntity<Response> verifyUser(@PathVariable String emailId)
 	{
@@ -66,6 +70,7 @@ public class UserController {
 		return new ResponseEntity<Response>(userEntity,HttpStatus.OK);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("/updateUser")
 	public ResponseEntity<Response> updateUser(@RequestHeader String token,@RequestBody UserDTO dto){
 		log.debug("Update user");
@@ -73,6 +78,7 @@ public class UserController {
 		return new ResponseEntity<Response>(userEntity,HttpStatus.OK);
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("/forgotpassword")
 	public ResponseEntity<Response> forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) 
 	{
