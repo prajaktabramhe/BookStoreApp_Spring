@@ -3,6 +3,7 @@ package com.bridgelabz.bookstore.service;
 import java.util.List;
 
 import com.bridgelabz.bookstore.dto.OrderDTO;
+import com.bridgelabz.bookstore.dto.OrderList;
 import com.bridgelabz.bookstore.entity.OrderEntity;
 import com.bridgelabz.bookstore.util.Response;
 
@@ -18,6 +19,6 @@ public interface IOrderService {
 	List<OrderEntity> getAllOrders(String token);
 
 	// To get all order placed by user
-	List<OrderEntity> getUserOrders(String token);
+	List<OrderList> getUserOrders(String token);
 
 }

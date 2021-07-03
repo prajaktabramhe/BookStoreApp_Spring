@@ -1,6 +1,7 @@
 package com.bridgelabz.bookstore.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.bookstore.dto.OrderDTO;
+import com.bridgelabz.bookstore.dto.OrderList;
 import com.bridgelabz.bookstore.entity.BookEntity;
 import com.bridgelabz.bookstore.entity.OrderEntity;
 import com.bridgelabz.bookstore.entity.UserEntity;
@@ -152,23 +154,27 @@ public class OrderService implements IOrderService {
 	 * To get all orders for user
 	 */
 	@Override
-	public List<OrderEntity> getUserOrders(String token) 
+	public List<OrderList> getUserOrders(String token) 
 	{
+		List<OrderList> OrderList = new ArrayList<>();
 		long id = tokenUtil.decodeToken(token);
 		Optional<UserEntity> isUserPresent = userRegistrationRepository.findById(id);
 		if(isUserPresent.isPresent()) 
 		{
-			Optional<OrderEntity> orderForUserExists = orderRepository.findByUserId(id);
-			if(orderForUserExists.isPresent()) 
-			{
+
 				List<OrderEntity> usersOrders = orderRepository.getAllOrdersForUser(id);
-				return usersOrders;
-			}
-			else 
-			{
-				log.error("No orders exists for user");
-				throw new BookStoreException(404, "No orders exists for user");
-			}
+				usersOrders.forEach(cart -> {
+					OrderList orderdata = new OrderList();
+					orderdata.setId(cart.getId());
+					orderdata.setQuantity(cart.getQuantity());
+					orderdata.setBookId(cart.getBookId());
+					orderdata.setAddress(cart.getAddress());
+					orderdata.setOrderDate(cart.getOrderDate());
+					orderdata.setUser(userRegistrationRepository.findById(cart.getUserId()).get());
+					OrderList.add(orderdata);
+				});
+				return OrderList;
+
 		}
 		else 
 		{
